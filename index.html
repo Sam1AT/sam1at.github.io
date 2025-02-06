@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sam</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: monospace;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #terminal {
+            width: 90%;
+            max-width: 800px;
+            height: 60vh;
+            overflow-y: auto;
+            border: 2px solid green;
+            padding: 15px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px green;
+        }
+        #input-line {
+            display: flex;
+            width: 90%;
+            max-width: 800px;
+            margin-top: 10px;
+        }
+        #prompt {
+            margin-right: 5px;
+            font-weight: bold;
+        }
+        #command {
+            background: none;
+            border: none;
+            color: green;
+            font-family: monospace;
+            outline: none;
+            width: 100%;
+        }
+        .output {
+            margin: 5px 0;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        .divider {
+            border-top: 1px solid green;
+            margin: 5px 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div>Welcome to My Personal Webpage type the following commands to see more details:</div>
+        <div>1) bio</div>
+        <div>2) resumee</div>
+        <div>3) github</div>
+        <div>4) linkedin</div>
+    </div>
+    <div id="input-line">
+        <span id="prompt">$</span>
+        <input type="text" id="command" autofocus>
+    </div>
+    
+    <script>
+        const terminal = document.getElementById("terminal");
+        const commandInput = document.getElementById("command");
+        
+        const commands = {
+            "help": "Available commands: help, about, contact, clear, bio, resumee, github, linkedin",
+            "about": "This is a personal webpage with a terminal-style interface.",
+            "contact": "You can reach me at: sam.ahmadizade@yahoo.com",
+            "bio": "I am a software developer with a passion for building web applications and learning new technologies.I'm currently studying computer science.",
+            "resumee": () => { window.open("resume.pdf", "_blank"); return "Downloading resume..."; },
+            "github": () => { window.open("https://github.com/sam1at", "_blank"); return "Redirecting to GitHub..."; },
+            "linkedin": () => { window.open("https://www.linkedin.com/in/sam-ahmadizadeh-tourzani-6711501b5/", "_blank"); return "Redirecting to LinkedIn..."; },
+            "clear": () => { terminal.innerHTML = ""; return ""; }
+        };
+
+        commandInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const command = commandInput.value.trim();
+                commandInput.value = "";
+                
+                let output = commands[command];
+                if (typeof output === "function") {
+                    output = output();
+                }
+                if (!output) {
+                    output = "Command not found. Type 'help' for a list of commands.";
+                }
+                
+                terminal.innerHTML += `<div class='output'>$ ${command}</div>`;
+                terminal.innerHTML += `<div class='divider'></div>`;
+                terminal.innerHTML += `<div class='output'>${output}</div>`;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
